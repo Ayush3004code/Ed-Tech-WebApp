@@ -191,7 +191,7 @@ exports.sendotp = async (req, res) => {
     // If user found with provided email
     if (checkUserPresent) {
       // Return 401 Unauthorized status code with error message
-      return res.status(401).json({
+      return res.status(409).json({
         success: false,
         message: `User is Already Registered`,
       })
@@ -202,18 +202,22 @@ exports.sendotp = async (req, res) => {
       lowerCaseAlphabets: false,
       specialChars: false,
     })
-    const result = await OTP.findOne({ otp: otp })
+    let result = await OTP.findOne({ otp: otp })
     console.log("Result is Generate OTP Func")
     console.log("OTP", otp)
     console.log("Result", result)
     while (result) {
       otp = otpGenerator.generate(6, {
         upperCaseAlphabets: false,
+        lowerCaseAlphabets: false,
+        specialChars: false,
       })
+      result = await OTP.findOne({ otp })
     }
     const otpPayload = { email, otp }
     const otpBody = await OTP.create(otpPayload)
     console.log("OTP Body", otpBody)
+    await mailSender(email, "Your OTP for registration", `Your OTP is: ${otp}`)
     res.status(200).json({
       success: true,
       message: `OTP Sent Successfully`,

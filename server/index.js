@@ -12,6 +12,7 @@ const cors = require("cors");
 const { cloudinaryConnect } = require("./config/cloudinary");
 const fileUpload = require("express-fileupload");
 const dotenv = require("dotenv");
+// const categoryRoute = require("./routes/Category");
 
 // Setting up port number
 const PORT = process.env.PORT || 4000;
@@ -47,6 +48,8 @@ app.use("/api/v1/profile", profileRoutes);
 app.use("/api/v1/course", courseRoutes);
 app.use("/api/v1/payment", paymentRoutes);
 app.use("/api/v1/reach", contactUsRoute);
+// app.use("/api/v1/category", categoryRoute )
+
 
 // Testing the server
 app.get("/", (req, res) => {
