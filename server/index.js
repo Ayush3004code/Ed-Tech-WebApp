@@ -26,12 +26,24 @@ database.connect();
 // Middlewares
 app.use(express.json());
 app.use(cookieParser());
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://ed-tech-frontend-eta.vercel.app",
+]
+
 app.use(
-	cors({
-		origin: "http://localhost:3000",
-		credentials: true,
-	})
-);
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (e.g., mobile apps, curl requests)
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true)
+      } else {
+        callback(new Error("Not allowed by CORS"))
+      }
+    },
+    credentials: true,
+  })
+)
 app.use(
 	fileUpload({
 		useTempFiles: true,
