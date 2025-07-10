@@ -4,13 +4,14 @@ import axios from "axios";
 export const axiosInstance = axios.create({});
 
 // apiConnector with optional token inclusion
-export const apiConnector = (method, url, bodyData, headers = {}, params = {}, includeAuth = true) => {
-  const token = JSON.parse(localStorage.getItem("token"));
+export const apiConnector = (method, url, bodyData, headers = {}, params = {}, includeAuth = true, token=null) => {
+  const localToken = JSON.parse(localStorage.getItem("token"));
+  const finalToken = token || localToken;
 
   // Build final headers
   const finalHeaders = {
     ...headers,
-    ...(includeAuth && token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(includeAuth && finalToken ? { Authorization: `Bearer ${finalToken}` } : {}),
   };
 
   return axiosInstance({

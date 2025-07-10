@@ -154,15 +154,23 @@ exports.editCourse = async (req, res) => {
     }
 
     // Update only the fields that are present in the request body
-    for (const key in updates) {
-      if (updates.hasOwnProperty(key)) {
-        if (key === "tag" || key === "instructions") {
-          course[key] = JSON.parse(updates[key])
-        } else {
-          course[key] = updates[key]
-        }
-      }
-    }
+    // for (const key in updates) {
+    //   if (updates.hasOwnProperty(key)) {
+    //     if (key === "tag" || key === "instructions") {
+    //       course[key] = JSON.parse(updates[key])
+    //     } else {
+    //       course[key] = updates[key]
+    //     }
+    //   }
+    // }
+
+        if (req.body.courseName) course.courseName = req.body.courseName;
+    if (req.body.courseDescription) course.courseDescription = req.body.courseDescription;
+    if (req.body.price) course.price = req.body.price;
+    if (req.body.category) course.category = req.body.category;
+    if (req.body.whatYouWillLearn) course.whatYouWillLearn = req.body.whatYouWillLearn;
+    if (req.body.tag) course.tag = JSON.parse(req.body.tag);
+    if (req.body.instructions) course.instructions = JSON.parse(req.body.instructions);
 
     await course.save()
 
@@ -451,7 +459,7 @@ exports.deleteCourse = async (req, res) => {
     }
 
     // Unenroll students from the course
-    const studentsEnrolled = course.studentsEnroled
+    const studentsEnrolled = course.studentsEnrolled
     for (const studentId of studentsEnrolled) {
       await User.findByIdAndUpdate(studentId, {
         $pull: { courses: courseId },

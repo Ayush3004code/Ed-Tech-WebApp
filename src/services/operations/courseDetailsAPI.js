@@ -265,6 +265,8 @@ export const deleteSubSection = async (data, token) => {
 export const fetchInstructorCourses = async (token) => {
   let result = []
   const toastId = toast.loading("Loading...")
+  console.log("Instructor Courses Token: ", token);
+
   try {
     const response = await apiConnector(
       "GET",
@@ -272,7 +274,11 @@ export const fetchInstructorCourses = async (token) => {
       null,
       {
         Authorization: `Bearer ${token}`,
-      }
+      },
+      // {},
+      {},
+      true,
+      token
     )
     console.log("INSTRUCTOR COURSES API RESPONSE............", response)
     if (!response?.data?.success) {

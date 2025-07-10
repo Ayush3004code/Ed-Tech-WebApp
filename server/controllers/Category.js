@@ -30,8 +30,8 @@ exports.createCategory = async (req, res) => {
 
 exports.showAllCategories = async (req, res) => {
   try {
-    const allCategories = await Category.find()
-    // const allCategories = await Category.find().populate("courses")
+    // const allCategories = await Category.find()
+    const allCategories = await Category.find().populate("courses")
     res.status(200).json({
       success: true,
       data: allCategories,
